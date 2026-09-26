@@ -1,0 +1,47 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092,localhost:9094
+      group-id: user-created-event
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: ${SPRING_MAIL_PORT}
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+mail:
+  from: ${MAIL_FROM}
+  welcome:
+    subject: Добро пожаловать в Task Tracker! 🎉
+    text: |
+      Привет!
+      Добро пожаловать в Task Tracker — твой личный помощник для управления задачами.
+
+      Здесь ты можешь создавать задачи, следить за их выполнением и не держать всё в голове. А мы постараемся вовремя напоминать о том, что действительно важно.
+
+      Желаем продуктивности, порядка в делах и побольше выполненных задач! 🚀
+
+      С уважением,
+      Команда Task Tracker
+
+  report:
+    subject: Отчёт по задачам за день 📊
+    text: |
+      Привет!
+
+      Вот твой отчёт по задачам за прошедший день.
+
+      Здесь собрана информация о выполненных и оставшихся задачах, чтобы ты мог быстро оценить свой прогресс и понять, что ещё предстоит сделать.
+
+      Продолжай в том же духе — шаг за шагом ты приближаешься к своим целям! 🚀
+
+      С уважением,
+      Команда Task Tracker
