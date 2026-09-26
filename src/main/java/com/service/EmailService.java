@@ -1,46 +1,45 @@
 package com.service;
 
 
-import com.event.UserCreatedEvent;
+import com.exception.EmailSendingException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
-    @Value("${mail.from}")
-    private String from;
 
     private final JavaMailSender mailSender;
 
-    private final String WELCOME_SUBJECT = """
-            Добро пожаловать в Task Tracker! 🎉
-            """;
-    private final String WELCOME_TEXT = """
-            Привет!
-            
-            Добро пожаловать в Task Tracker — твой личный помощник для управления задачами.
-            
-            Здесь ты можешь создавать задачи, следить за их выполнением и не держать всё в голове. А мы постараемся вовремя напоминать о том, что действительно важно.
-            
-            Желаем продуктивности, порядка в делах и побольше выполненных задач! 🚀
-            
-            С уважением,
-            Команда Task Tracker
-            """;
+    public void send(String from, String username, String subject, String text, byte[] attachment) {
 
-    public void send(UserCreatedEvent event) {
-        SimpleMailMessage message = new SimpleMailMessage();
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
 
-        message.setFrom(from);
-        message.setTo(event.getUsername());
-        message.setSubject(WELCOME_SUBJECT);
-        message.setText(WELCOME_TEXT);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-        mailSender.send(message);
+            helper.setFrom(from);
+            helper.setTo(username);
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            if(attachment != null) {
+                helper.addAttachment("task-report.pdf",
+                        new ByteArrayResource(attachment)
+                );
+            }
+
+            mailSender.send(mimeMessage);
+
+        } catch (MessagingException e) {
+            throw new EmailSendingException("failed to send email");
+        }
     }
 }
