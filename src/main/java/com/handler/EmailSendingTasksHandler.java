@@ -2,12 +2,11 @@ package com.handler;
 
 
 import com.dto.EmailProperties;
-import com.event.UserCreatedEvent;
-import com.event.UserReportCreatedEvent;
+import com.kafka.events.UserCreatedEvent;
+import com.kafka.events.UserReportCreatedEvent;
 import com.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
