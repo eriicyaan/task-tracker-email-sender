@@ -1,8 +1,11 @@
+
+
 spring:
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092,localhost:9094
-      group-id: user-created-event
+      bootstrap-servers: localhost:9092
+      group-id: email-sending-tasks-group
+      trusted-packages: com.kafka.events
   mail:
     host: ${SPRING_MAIL_HOST}
     port: ${SPRING_MAIL_PORT}
@@ -45,3 +48,7 @@ mail:
 
       С уважением,
       Команда Task Tracker
+
+
+server:
+  port: 8081

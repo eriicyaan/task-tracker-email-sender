@@ -2,17 +2,16 @@ package com.handler;
 
 
 import com.dto.EmailProperties;
-import com.kafka.events.UserCreatedEvent;
-import com.kafka.events.UserReportCreatedEvent;
+import com.kafka.events.EmailSendingEvent;
+import com.kafka.events.EventType;
 import com.service.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
+@Slf4j
 @Component
 @KafkaListener(topics = "email-sending-tasks", groupId = "email-sending-tasks-group")
 @RequiredArgsConstructor
@@ -23,32 +22,27 @@ public class EmailSendingTasksHandler {
     private final EmailProperties emailProperties;
 
     @KafkaHandler
-    public void handleEvent(Object message) throws IOException {
-        if(message.getClass().equals(UserCreatedEvent.class)) {
-            UserCreatedEvent userCreatedEvent = (UserCreatedEvent) message;
+    public void handleEvent(EmailSendingEvent message) {
+        log.info("RECEIVE MESSAGE: {}", message);
 
-            emailService.send(
+        switch (message.getEventType()) {
+            case USER_CREATED -> emailService.send(
                     emailProperties.from(),
-                    userCreatedEvent.getUsername(),
-                    emailProperties.welcomeSubject(),
-                    emailProperties.welcomeText(),
+                    message.getUsername(),
+                    emailProperties.welcome().subject(),
+                    emailProperties.welcome().text(),
                     null
             );
-        } else {
-            UserReportCreatedEvent userReportCreatedEvent = (UserReportCreatedEvent) message;
-            InputStreamResource report = userReportCreatedEvent.getReport();
-
-            byte[] attachment = report.getContentAsByteArray();
-
-
-            emailService.send(
+            case USER_REPORT_CREATED -> emailService.send(
                     emailProperties.from(),
-                    userReportCreatedEvent.getUsername(),
-                    emailProperties.reportSubject(),
-                    emailProperties.reportText(),
-                    attachment
+                    message.getUsername(),
+                    emailProperties.report().subject(),
+                    emailProperties.report().text(),
+                    message.getReport()
             );
         }
+
+        log.info("SUCCESSFULLY SEND MESSAGE TO EMAIL");
     }
 
 }
