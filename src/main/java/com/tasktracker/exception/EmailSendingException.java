@@ -1,4 +1,4 @@
-package com.exception;
+package com.tasktracker.exception;
 
 public class EmailSendingException extends RuntimeException {
 

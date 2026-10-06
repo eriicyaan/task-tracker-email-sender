@@ -1,4 +1,4 @@
-package com.dto;
+package com.tasktracker.dto;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;

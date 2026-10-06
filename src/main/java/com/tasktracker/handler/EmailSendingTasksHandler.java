@@ -1,10 +1,9 @@
-package com.handler;
+package com.tasktracker.handler;
 
 
-import com.dto.EmailProperties;
-import com.kafka.events.EmailSendingEvent;
-import com.kafka.events.EventType;
-import com.service.EmailService;
+import com.tasktracker.dto.EmailProperties;
+import com.tasktracker.kafka.events.EmailSendingEvent;
+import com.tasktracker.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
