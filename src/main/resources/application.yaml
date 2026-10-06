@@ -2,10 +2,10 @@
 
 spring:
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
     consumer:
       group-id: email-sending-tasks-group
-      trusted-packages: com.kafka.events
+      trusted-packages: com.tasktracker.kafka.events
   mail:
     host: ${SPRING_MAIL_HOST}
     port: ${SPRING_MAIL_PORT}
